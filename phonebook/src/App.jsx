@@ -1,10 +1,13 @@
 import { useState } from 'react'
+import Form from './Form';
+import Persons from './Persons';
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas', number: '040-123456', id: 1 }
   ]) 
   const [newName, setNewName] = useState('');
+  const [newNumber, setNewNumber] = useState('');
 
   const handleAddPerson = (e) => {
     e.preventDefault();
@@ -14,27 +17,30 @@ const App = () => {
       return;
     }
     const personObj = {
-      name: newName
+      name: newName,
+      number: newNumber,
+      id: persons.length + 1
     }
     setPersons(persons.concat(personObj));
     setNewName('');
+    setNewNumber('');
+  }
+
+  const formProps = {
+    handleAddPerson,
+    setNewName,
+    setNewNumber,
+    newName,
+    newNumber
   }
 
   return (
     <div>
-      <h2>Phonebook</h2>
-      <form onSubmit={handleAddPerson}>
-        <div>
-          name: <input value={newName} onChange={(e) => setNewName(e.target.value)} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      {console.log(persons)}
+      <h2>Add a new</h2>
+      <Form submitForm={formProps} />
       <h2>Numbers</h2>
-      <div>
-        {persons.map((person, index) => <p key={`${person.name}-${index}`}>{person.name}</p>)}
-      </div>
+      <Persons persons={persons} />
     </div>
   )
 }
