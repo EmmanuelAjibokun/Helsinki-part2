@@ -1,4 +1,0 @@
-for each course:
-    Header <Header>
-    partList & exercises <Parts>
-    total exercises <Total>
