@@ -1,13 +1,17 @@
 import { useState } from 'react'
 import Form from './Form';
 import Persons from './Persons';
+import Input from './Input';
 
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456', id: 1 }
-  ]) 
+  ])
+  const [filtered, setFiltered] = useState([]);
+
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
+  const [searchText, setSearchText] = useState('');
 
   const handleAddPerson = (e) => {
     e.preventDefault();
@@ -26,6 +30,12 @@ const App = () => {
     setNewNumber('');
   }
 
+  const findPerson = (e) => {
+    setSearchText(e.target.value)
+    const matches = persons.filter(person => person.name.toLowerCase().includes(e.target.value.toLowerCase()))
+    setFiltered(matches);
+  }
+
   const formProps = {
     handleAddPerson,
     setNewName,
@@ -36,11 +46,14 @@ const App = () => {
 
   return (
     <div>
-      {console.log(persons)}
+      <h2>Phonebook</h2>
+      <div>
+        filter shown with <input onChange={findPerson} value={searchText} />
+      </div>
       <h2>Add a new</h2>
       <Form submitForm={formProps} />
       <h2>Numbers</h2>
-      <Persons persons={persons} />
+      <Persons persons={searchText ? filtered : persons} />
     </div>
   )
 }
