@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Form from './Form';
 import Persons from './Persons';
 import Input from './Input';
+import Filter from './Filter';
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -47,9 +48,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with <input onChange={findPerson} value={searchText} />
-      </div>
+      <Filter searchText={searchText} findPerson={findPerson} />
       <h2>Add a new</h2>
       <Form submitForm={formProps} />
       <h2>Numbers</h2>
