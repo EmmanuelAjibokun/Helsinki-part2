@@ -13,4 +13,15 @@ const addPerson = newPersons => {
     return request.then(res => res.data);
 }
 
-export default { getAll, addPerson };
+const deletePerson = personId => {
+    const request = axios.delete(`${baseUrl}/${personId}`)
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+            console.error('Error deleting resource:', error);
+        });
+    return request;
+}
+
+export default { getAll, addPerson, deletePerson };

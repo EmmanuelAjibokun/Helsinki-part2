@@ -45,6 +45,18 @@ const App = () => {
     setNewNumber('');
   }
 
+  const handleDeletePerson = id => {
+    console.log(id)
+    const person = persons.find(person => person.id == id)
+    confirm(`Delete ${person.name}`)
+    personServices
+      .deletePerson(id)
+      .then(res => {
+        const filtered = persons.filter(person => person.id !== res.id)
+        setPersons(filtered)
+      }).catch(err => console.log(err))
+  }
+
   const findPerson = (e) => {
     setSearchText(e.target.value)
     const matches = persons.filter(person => person.name.toLowerCase().includes(e.target.value.toLowerCase()))
@@ -66,7 +78,7 @@ const App = () => {
       <h2>Add a new</h2>
       <Form submitForm={formProps} />
       <h2>Numbers</h2>
-      <Persons persons={searchText ? filtered : persons} />
+      <Persons persons={searchText ? filtered : persons} handleDelete={handleDeletePerson} />
     </div>
   )
 }
