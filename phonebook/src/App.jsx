@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react'
 import Form from './Form';
 import Persons from './Persons';
-import Input from './Input';
 import Filter from './Filter';
 
-import axios from 'axios';
+import personServices from './services/persons';
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -15,16 +14,16 @@ const App = () => {
 
   useEffect(() => {
     console.log("Effect")
-    axios
-      .get("http://localhost:3001/persons")
+    personServices
+      .getAll()
       .then(res => {
         console.log("fulfilled")
-        setPersons(res.data)
+        setPersons(res)
       })
   }, [])
   const [searchText, setSearchText] = useState('');
 
-  const handleAddPerson = (e) => {
+  const handleAddPerson = (e) => {// add to the list of persons
     e.preventDefault();
     const nameExist = persons.find(person => person.name === newName)
     if (nameExist) {
@@ -33,10 +32,15 @@ const App = () => {
     }
     const personObj = {
       name: newName,
-      number: newNumber,
-      id: persons.length + 1
+      number: newNumber
     }
-    setPersons(persons.concat(personObj));
+    personServices
+      .addPerson(personObj)
+      .then(res => {
+        return setPersons(persons.concat(res));
+      })
+      .catch(err => console.log(err))
+    
     setNewName('');
     setNewNumber('');
   }
