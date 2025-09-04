@@ -26,13 +26,22 @@ const App = () => {
   const handleAddPerson = (e) => {// add to the list of persons
     e.preventDefault();
     const nameExist = persons.find(person => person.name === newName)
-    if (nameExist) {
-      alert(`${newName} is already added to phonebook.`)
-      return;
-    }
     const personObj = {
       name: newName,
       number: newNumber
+    }
+    if (nameExist) {
+      confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
+      const newPerson = {...personObj, id: nameExist.id};
+
+      personServices
+        .updatePerson(newPerson)
+        .then(res => {
+          const filtered = persons.filter(person => person.id !== newPerson.id);
+          return setPersons(filtered.concat(res));
+        })
+      
+      return;
     }
     personServices
       .addPerson(personObj)
