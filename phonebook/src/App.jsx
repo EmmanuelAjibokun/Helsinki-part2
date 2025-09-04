@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Form from './Form';
 import Persons from './Persons';
 import Filter from './Filter';
+import Notification from './Notification';
 
 import personServices from './services/persons';
 
@@ -11,6 +12,9 @@ const App = () => {
 
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
+
+  const [errMessage, setErrMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   useEffect(() => {
     console.log("Effect")
@@ -46,6 +50,8 @@ const App = () => {
     personServices
       .addPerson(personObj)
       .then(res => {
+        setSuccessMessage(`Added ${res.name}`);
+        setTimeout(() => setSuccessMessage(null), 3000);
         return setPersons(persons.concat(res));
       })
       .catch(err => console.log(err))
@@ -63,7 +69,15 @@ const App = () => {
       .then(res => {
         const filtered = persons.filter(person => person.id !== res.id)
         setPersons(filtered)
-      }).catch(err => console.log(err))
+      })
+      .catch(err => {
+        if (err.status == 404) {
+          const filtered = persons.filter(item => item.id !== person.id)
+          setPersons(filtered)
+          setErrMessage(`Information of ${person.name} has already been removed from server`)
+          setTimeout(() => setErrMessage(null), 5000);
+        }
+      })
   }
 
   const findPerson = (e) => {
@@ -83,6 +97,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={successMessage} style={"success"} />
+      <Notification message={errMessage} style={"error"} />
       <Filter searchText={searchText} findPerson={findPerson} />
       <h2>Add a new</h2>
       <Form submitForm={formProps} />

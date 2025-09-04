@@ -18,9 +18,6 @@ const deletePerson = personId => {
         .then(response => {
             return response.data;
         })
-        .catch(error => {
-            console.error('Error deleting resource:', error);
-        });
     return request;
 }
 
@@ -28,9 +25,6 @@ const updatePerson = person => {
     const request = axios.put(`${baseUrl}/${person.id}`, person)
         .then(res => {
             return res.data;
-        })
-        .catch(err => {
-            console.error('Error: ', err);
         })
     return request;
 }
