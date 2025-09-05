@@ -31,7 +31,7 @@ function App() {
     const filter = filterSearch(countries, country);
     setFilteredSearch(filter);
   }
-  
+
   return (
     <div>
       <Finder searchText={searchText} search={handleSearch} />
