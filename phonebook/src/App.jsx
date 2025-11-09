@@ -7,6 +7,7 @@ import Notification from './Notification';
 import personServices from './services/persons';
 
 const App = () => {
+  // advice: set up a system to invalidate this saved frontend persons list, to avoid stale data
   const [persons, setPersons] = useState([])
   const [filtered, setFiltered] = useState([]);
 
@@ -54,7 +55,11 @@ const App = () => {
         setTimeout(() => setSuccessMessage(null), 3000);
         return setPersons(persons.concat(res));
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        const errMsg = err?.response?.data?.error
+        setErrMessage(errMsg);
+        setTimeout(() => setErrMessage(null), 3000);
+      })
     
     setNewName('');
     setNewNumber('');

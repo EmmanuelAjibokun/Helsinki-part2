@@ -1,7 +1,7 @@
 // Single Responsibility Principle to extract communication with the backend in a separate module
 import axios from "axios";
 
-const baseUrl = 'http://localhost:3001/persons';
+const baseUrl = '/api/persons'; // if you would be building a dist file for the backend, kindly ensure to take out the baseUrl of the server origin, since both frontend and backend would now be sitting on the same origin. e.g use; '/api/persons'
 
 const getAll = () => {
     const request = axios.get(baseUrl);
